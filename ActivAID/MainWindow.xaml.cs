@@ -102,7 +102,7 @@ namespace ActivAID
             if (!unixCommands(outPut))//checks for specific responses by the bot to perform functions
             {
                 txtBlockbot.Text = " BOT: \n"+Program.backendCommand(InputBox.Text);
-                Console.WriteLine(InputBox.Text+"::: yo");
+                //Console.WriteLine(InputBox.Text+"::: yo");
             }
             InputBox.Text = string.Empty;
             //unixCommands(outPut);

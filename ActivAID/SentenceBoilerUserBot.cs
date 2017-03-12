@@ -14,6 +14,7 @@ namespace Test
             string path = "SynBotDir";
             foreach (string fileName in System.IO.Directory.EnumerateFiles(path)) //maybe don't hard code
             {
+                Console.WriteLine(fileName + "file");
                 SimlBot Chatbot = new SimlBot();
                 Chatbot.PackageManager.LoadFromString(File.ReadAllText(fileName));
                 var result = Chatbot.Chat(sentence);
