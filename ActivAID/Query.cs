@@ -18,7 +18,7 @@ namespace Test
         public Query(List<Attrib> attributeList, 
                      Tuple<int,bool> quantityOfResponses, 
                      string resourceExpected,
-                     string originalSentence)
+                     string originalSentence) : this()
         {
             this.attributeList = attributeList;
             this.quantityOfResponses = quantityOfResponses;

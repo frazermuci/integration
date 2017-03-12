@@ -12,9 +12,9 @@ namespace Test
 {
     class ParsedCHM
     {
-        public List<List<Element>> blocks {get;}//= new List<List<Element>>(); //breadth first from root
+        public List<List<Element>> blocks { get; set; }//= new List<List<Element>>(); //breadth first from root
         private List<Element> buff; //= new List<Element>();
-        public List<string> hrefs {get;} //= new List<string>();
+        public List<string> hrefs { get; set; } //= new List<string>();
         private string filePath;
         public string title;
 

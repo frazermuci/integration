@@ -40,7 +40,6 @@ namespace Test
                         int occurance = 0;
                         foreach (string s in block.Item2)
                         {
-
                             foreach (string kw in kwList)
                             {
                                 occurance = occurance + Regex.Matches(s, kw).Count;

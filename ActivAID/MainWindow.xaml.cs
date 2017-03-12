@@ -101,8 +101,10 @@ namespace ActivAID
             InputBox.Text = string.Empty;
             if (!unixCommands(outPut))//checks for specific responses by the bot to perform functions
             {
-                Program.backendCommand(outPut);
+                Program.backendCommand(InputBox.Text);
+                //Console.WriteLine(InputBox.Text+"::: yo");
             }
+            //unixCommands(outPut);
         }
         private void CloseButton_OnClick(object sender, RoutedEventArgs e)
         {

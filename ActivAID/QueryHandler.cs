@@ -58,6 +58,7 @@ namespace Test
                                                 temp.Add(s);
                                             }
                                             ltup.Add(new Tuple<string, string[]>(q.originalSentence, temp.ToArray()));
+                                            
                                         }
                                         return ltup;
                                        }
@@ -66,7 +67,7 @@ namespace Test
                 //}
                 // Task.
             }
-            return await Task.WhenAll(issuedQueries);
+            return await Task.WhenAll(issuedQueries).ConfigureAwait(false);
         }
 
         public List<List<Tuple<string, string[]>>> handleQuery(string[] sentences)
