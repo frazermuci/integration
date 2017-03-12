@@ -12,7 +12,7 @@ namespace Test
 {
     public class Program
     {
-        public static void backendCommand(string paragraph)
+        public static string backendCommand(string paragraph)
         {
             
             Func<string, string> func = new Func<string, string>((x) =>
@@ -30,6 +30,8 @@ namespace Test
                 var qHandler = new QueryHandler(dA,sb, func);
                 int max = -99;
                 string[] maxStrings = new string[] {""};
+                var rString ="";
+                Console.WriteLine(sentences.Count() + " "+paragraph.Count());
                 foreach (var response in qHandler.handleQuery(sentences))
                 {
                     string query = "";
@@ -50,13 +52,17 @@ namespace Test
                         max = occurance > max ? occurance : max;
                     }
                     Console.WriteLine("Hits for query: " + "\"" + query + "\"");
+                    rString = rString + "Hits for query: " + "\"" + query + "\"\n";
                     foreach (string s in maxStrings)
                     {
+                        rString = rString + s + "\n";
                         Console.WriteLine(s);
                     }
                     Console.WriteLine();
+                    //return rString + "\n";
                 //}   
             }
+            return rString;
         }
     }
 }

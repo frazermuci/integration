@@ -30,7 +30,11 @@ namespace Test
             QueryGenerator queryGen = new QueryGenerator(sb);
             foreach (string sentence in sentences)
             {
-                queries.Add(queryGen.queryGen(sentence));
+                Console.WriteLine(sentence);
+                if (sentence != "" && sentence != "\n")
+                {
+                    queries.Add(queryGen.queryGen(sentence));
+                }
             }
         }
 

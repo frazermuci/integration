@@ -98,12 +98,13 @@ namespace ActivAID
             OutputBox.Items.Add(botmsg);
             OutputBox.SelectedIndex = OutputBox.Items.Count - 1;
             OutputBox.SelectedIndex = -1;
-            InputBox.Text = string.Empty;
+            
             if (!unixCommands(outPut))//checks for specific responses by the bot to perform functions
             {
-                Program.backendCommand(InputBox.Text);
-                //Console.WriteLine(InputBox.Text+"::: yo");
+                txtBlockbot.Text = " BOT: \n"+Program.backendCommand(InputBox.Text);
+                Console.WriteLine(InputBox.Text+"::: yo");
             }
+            InputBox.Text = string.Empty;
             //unixCommands(outPut);
         }
         private void CloseButton_OnClick(object sender, RoutedEventArgs e)
