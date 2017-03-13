@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Windows;
 using Syn.Bot.Siml;
 using System.Windows.Input;
@@ -30,26 +30,6 @@ namespace ActivAID
             AppWindow = this;
             MouseDown += delegate { DragMove(); };
         }
-/*        public void setColorScheme(String ColorScheme)
-        {
-            OutputBox.Items.Clear();
-            if (ColorScheme == "DLG")
-            {
-                grid1.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FF284167"));
-                close.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FF5383AD"));
-                ColorBOT = "#FF4A4B53";
-                ColorUser = "#FF5383AD";
-                FontColor = "#FFFFFF";
-            }
-            else if(ColorScheme=="GBW"){
-                grid1.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#4A4B53"));
-                close.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FF000000"));
-                close.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFFFFF"));
-                firstBOT.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FF284167"));
-                ColorBOT = "#FF284167";
-                ColorUser = "#FF000000";
-            }
-        }*/
 
         /*
          * Handles the "send" button click
@@ -175,14 +155,4 @@ namespace ActivAID
             }
         }
 
-        private void SettingsButton_OnClick(object sender, MouseButtonEventArgs e)
-        {
-            //To be developed: Dialog box pop up with options to chagne color scheme or font size in user/bot conversation
-            
-        }
-    }
-
-    internal class Graphics
-    {
-    }
 }
