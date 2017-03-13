@@ -18,7 +18,9 @@ namespace ActivAID
         public Label botmsg;
         public String ColorBOT, ColorUser, FontColor;
         public static MainWindow AppWindow;
-
+        public Settings settwindow;
+        public int fontSize;
+        public String GoldBOT;
         public MainWindow()
         {
             InitializeComponent();
@@ -29,6 +31,9 @@ namespace ActivAID
             FontColor = "#FFFFFF";
             AppWindow = this;
             MouseDown += delegate { DragMove(); };
+            settwindow = new Settings();
+            fontSize = 14;
+            GoldBOT = "botmsg";
         }
 
         /*
@@ -52,33 +57,30 @@ namespace ActivAID
             usermsg.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom(ColorUser));
             usermsg.HorizontalAlignment = HorizontalAlignment.Center;
             usermsg.VerticalAlignment = VerticalAlignment.Top;
-            usermsg.Width = 185;
+            usermsg.Width = 200;
             usermsg.Margin = new Thickness(0, 10, 0, 0);
             usermsg.RenderTransformOrigin = new Point(0.5,0.5);
             usermsg.RenderTransform = new SkewTransform(10,0);
             usermsg.FontFamily = new FontFamily("Candara");
-            usermsg.FontSize = 12;
-            usermsg.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom(FontColor));
-            OutputBox.Items.Add(usermsg);
+            usermsg.FontSize = fontSize;
+            usermsg.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFFFFF"));
+            OutputBox.Items.Insert(0, usermsg);
             txtBlockbot.Text = "  BOT: "+result.BotMessage;
-            botmsg.Name = "botmsg";   //bot's response box
+            botmsg.Name = GoldBOT;   //bot's response box
             botmsg.Target = OutputBox;
             botmsg.Content = txtBlockbot;
             botmsg.BorderThickness = new Thickness(1);
             botmsg.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom(ColorBOT));
             botmsg.HorizontalAlignment = HorizontalAlignment.Center;
             botmsg.VerticalAlignment = VerticalAlignment.Top;
-            botmsg.Width = 185; 
-            botmsg.Margin = new Thickness(22, 0, 0, 0);
+            botmsg.Width = 200; 
+            botmsg.Margin = new Thickness(28, 0, 0, 0);
             botmsg.RenderTransformOrigin = new Point(0.5, 0.5);
             botmsg.RenderTransform = new SkewTransform(-10, 0);
             botmsg.FontFamily = new FontFamily("Candara");
-            botmsg.FontSize = 12;
-            botmsg.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom(FontColor)); 
-            OutputBox.Items.Add(botmsg);
-            OutputBox.SelectedIndex = OutputBox.Items.Count - 1;
-            OutputBox.SelectedIndex = -1;
-            
+            botmsg.FontSize = fontSize;
+            botmsg.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFFFFF"));
+            OutputBox.Items.Insert(0, botmsg);
             if (!unixCommands(outPut))//checks for specific responses by the bot to perform functions
             {
                 txtBlockbot.Text = " BOT: \n"+Program.backendCommand(InputBox.Text);
@@ -133,7 +135,7 @@ namespace ActivAID
         /*
          * Added event binding for the 'return' key which calls the "SendButton_OnClick" method
          */
-        private void OnKeyDownHandler(object sender, KeyEventArgs e)
+        private void OnKeyUpHandler(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Return)
             {
@@ -146,13 +148,12 @@ namespace ActivAID
             tb.Text = string.Empty;
             tb.GotFocus -= TextBox_GotFocus; //Take off the "Search..." placeholder when user clicks on textbox
         }
-        private void BringSelectionIntoView(object sender, SelectionChangedEventArgs e)
-        { //Scroll down to the bottom after every query
-            Selector selector = sender as Selector;
-            if (selector is ListBox)
-            {
-                (selector as ListBox).ScrollIntoView(selector.SelectedItem);
-            }
-        }
 
+        private void SettingsButton_OnClick(object sender, MouseButtonEventArgs e)
+        {
+            //Dialog box pop up with options to chagne color scheme or font size in user/bot conversation
+            settwindow.Show();
+            settwindow.Topmost = true;
+        }
+    }
 }
