@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         WindowStyle="None"
         Name="main"
-        Title="ActivAID" Height="541.264" Width="374.861" WindowStartupLocation="Manual" FontFamily="Agency FB" BorderBrush="Black" Background="#2b4167" AllowsTransparency="True" MouseDown="MainWindow_MouseDown">
+        Title="ActivAID" Height="541.264" Width="374.861" WindowStartupLocation="Manual" FontFamily="Agency FB" BorderBrush="Black" Background="#2b4167" AllowsTransparency="True">
     <Grid x:Name="grid1">
         <Button Name="close" Content="x" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Click="CloseButton_OnClick" Margin="345,-1,0.2,513.6" BorderBrush="{x:Null}" FontFamily="Berlin Sans FB" FontSize="20" Background="#5383AD" BorderThickness="0" Cursor="Hand" ClickMode="Press" Width="30" Height="29" Foreground="White"/>
         <Label x:Name="label" Content="ActivAID" HorizontalAlignment="Center" Margin="0,-1,0,0" VerticalAlignment="Top" FontFamily="Candara" FontSize="18" Foreground="White" FontWeight="Bold" Height="32" Width="77"/>
