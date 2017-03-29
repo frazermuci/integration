@@ -1,23 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Syn.Bot.Siml;
+using System.IO;
+using System;
 
 namespace Test
 {
-    public abstract class SentenceBoiler
+    public class SentenceBoiler
     {
-        //Tuple<string, bool> boilDown(string sentecnce);
-        public abstract string boilDown(string sentence);
-
-        public static SentenceBoiler sentenceBoilerFactory(string reify)
+        public string boilDown(string sentence)
         {
-            if (reify == "UserBot")
+            int max = -1;
+            string maxFile = "";
+            string path = "SynBotDir";
+            foreach (string fileName in System.IO.Directory.EnumerateFiles(path)) //maybe don't hard code
             {
-                return new SentenceBoilerUserBot();
+                Console.WriteLine(fileName + "file");
+                SimlBot Chatbot = new SimlBot();
+                Chatbot.PackageManager.LoadFromString(File.ReadAllText(fileName));
+                var result = Chatbot.Chat(sentence);
+                string outString = result.BotMessage;
+                if (!outString.Contains(";"))
+                {
+                    continue;
+                }                
+                string[] output = result.BotMessage.Split(';');
+                var lastString = output[output.Length-2];
+                var response = lastString.Split(':');
+                int test = Convert.ToInt32(response[0]);
+                maxFile = max < test ? response[1] : maxFile;
+                max = max < test ? test : max;
             }
-            else { return null; }
+            //return new Tuple<string,bool>(maxFile, true);
+            return maxFile;
         }
     }
 }

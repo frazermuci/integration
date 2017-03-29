@@ -21,7 +21,7 @@ namespace Test
                 new HTMLMessager().removeFromLine(ref temp);
                 return temp;
             });
-            SentenceBoiler sb = SentenceBoiler.sentenceBoilerFactory("UserBot");
+            SentenceBoiler sb = new SentenceBoiler();
 			DataAccess dA = new DataAccessDB();
             //while (true)
             //{

@@ -9,31 +9,39 @@ namespace Test
 {
     class QueryHandler
     {
-        Func<string, string> stringOp;
-        List<Query> queries;
-        SentenceBoiler sb;
         DataAccess dA;
+        QueryGenerator queryGen;
+        Func<string, string> stringOp;
+        List<Query> queries;        
 
         public QueryHandler(
                             DataAccess dA,
                             SentenceBoiler sb,
                             Func<string, string> stringOp
-                            ) //later associate results with
-        {                                                                               //query
+                            )
+        {                                                                               
             this.dA = dA;
-            this.sb = sb;
+            queryGen = new QueryGenerator(sb);
             this.stringOp = stringOp;
-            this.queries = new List<Query>();
+            queries = new List<Query>();
         }
 
+        /// <summary>
+        /// takes in input from front end and generates queries
+        /// </summary>
+        /// <param name="sentences">input quries from front end</param>
         private void genQueries(string[] sentences)
         {
-            QueryGenerator queryGen = new QueryGenerator(sb);
             foreach (string sentence in sentences)
             {
                 queries.Add(queryGen.queryGen(sentence));
             }
         }
+
+        /// <summary>
+        /// retrieves responses to queries and aggregates those responses
+        /// </summary>
+        /// <param name="q">Query to be sent off to data tier</param>
         private QueryResponseList aggregateQueryResults(Query q)
         {
             QueryResponseList blockList = new QueryResponseList();           
@@ -44,6 +52,9 @@ namespace Test
             return blockList;
         }
 
+        /// <summary>
+        /// sends off query objects to the data tier
+        /// </summary>
         private async Task<QueryResponseList[]> sendOff()
         {
             List<Task<QueryResponseList>> issuedQueries = new List<Task<QueryResponseList>>();
@@ -53,12 +64,23 @@ namespace Test
                 (
                     Task<QueryResponseList>.Factory.StartNew
                     (() => {return aggregateQueryResults(q);})
-                 );
+                );
             }
             return await Task.WhenAll(issuedQueries).ConfigureAwait(false);
         }
 
-        public List<QueryResponseList> handleQuery(string[] sentences)
+        /// <summary>
+        /// encapsulates the algorithm for summarizing the help files
+        /// </summary>
+        /// <param name="toSummarize">responses from data access tier that will be summarized</param>
+        public Tuple<string,string>[] summarize(List<QueryResponseList> toSummarize)//TODO
+        { }
+
+        /// <summary>
+        /// acts as the junction for communcication between data access and front end
+        /// </summary>
+        /// <param name="sentences">input queries from the front end</param>
+        public Tuple<string, string>[] handleQuery(string[] sentences)
         {
             genQueries(sentences);
             List<QueryResponseList> handledQueries = new List<QueryResponseList>();
@@ -66,10 +88,11 @@ namespace Test
             foreach(QueryResponseList dict in response)
             {
                 var deferred = from r in dict
-                           select new Tuple<string, string[]>(r.Item1, r.Item2.Select((x) => stringOp(x)).ToArray());//stringOp(r.Value);
+                           select new Tuple<string, string[]>(r.Item1, r.Item2.Select((x) => stringOp(x)).ToArray());
                 handledQueries.Add(deferred.ToList());
             }
-            return handledQueries;
+            //return handledQueries;
+            return summarize(handledQueries);
         }
     }
 }
