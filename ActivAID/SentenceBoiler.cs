@@ -9,7 +9,7 @@ namespace Test
     public abstract class SentenceBoiler
     {
         //Tuple<string, bool> boilDown(string sentecnce);
-        public abstract string boilDown(string sentecnce);
+        public abstract string boilDown(string sentence);
 
         public static SentenceBoiler sentenceBoilerFactory(string reify)
         {

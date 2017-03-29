@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using QueryResponseList = System.Collections.Generic.List<System.Tuple<string, string[]>>;
 
 namespace Test
 {
@@ -30,72 +31,45 @@ namespace Test
             QueryGenerator queryGen = new QueryGenerator(sb);
             foreach (string sentence in sentences)
             {
-                Console.WriteLine(sentence);
-                if (sentence != "" && sentence != "\n")
-                {
-                    queries.Add(queryGen.queryGen(sentence));
-                }
+                queries.Add(queryGen.queryGen(sentence));
             }
         }
-
-        private async Task<List<Tuple<string, string[]>>[]> sendOff()
+        private QueryResponseList aggregateQueryResults(Query q)
         {
-            List<Task<List<Tuple<string, string[]>>>> issuedQueries = new List<Task<List<Tuple<string, string[]>>>>();
+            QueryResponseList blockList = new QueryResponseList();           
+            foreach(var kvpair in dA.query(q))
+            {
+                blockList.Add(new Tuple<string, string[]>(q.originalSentence, kvpair.Value.ToArray()));
+            }
+            return blockList;
+        }
+
+        private async Task<QueryResponseList[]> sendOff()
+        {
+            List<Task<QueryResponseList>> issuedQueries = new List<Task<QueryResponseList>>();
             foreach (Query q in queries)
             {
-               // foreach (Attrib a in q.attributeList)
-                //{
-                    
-                    issuedQueries.Add
-                    (
-                            Task<List<Tuple<string, string[]>>>.Factory.StartNew
-                            (                          
-                             
-                                () => {
-                                        List<Tuple<string, string[]>> ltup = new List<Tuple<string, string[]>>();
-                                        
-                                        foreach (var kvpair in dA.query(q))
-                                        {
-                                            List<string> temp = new List<string>();
-                                            foreach (var s in kvpair.Value)
-                                            {
-                                                temp.Add(s);
-                                            }
-                                            ltup.Add(new Tuple<string, string[]>(q.originalSentence, temp.ToArray()));
-                                            
-                                        }
-                                        return ltup;
-                                       }
-                            )
-                    );
-                //}
-                // Task.
+                issuedQueries.Add
+                (
+                    Task<QueryResponseList>.Factory.StartNew
+                    (() => {return aggregateQueryResults(q);})
+                 );
             }
             return await Task.WhenAll(issuedQueries).ConfigureAwait(false);
         }
 
-        public List<List<Tuple<string, string[]>>> handleQuery(string[] sentences)
+        public List<QueryResponseList> handleQuery(string[] sentences)
         {
             genQueries(sentences);
-            List<List<Tuple<string, string[]>>> retList = new List<List<Tuple<string, string[]>>>();
-            List<Tuple<string, string[]>>[] response = sendOff().Result;
-            foreach (List<Tuple<string, string[]>> l in response)
+            List<QueryResponseList> handledQueries = new List<QueryResponseList>();
+            QueryResponseList[] response = sendOff().Result;
+            foreach(QueryResponseList dict in response)
             {
-                List<Tuple<string, string[]>> lList = new List<Tuple<string, string[]>>();
-                foreach (var r in l)
-                {
-                    //refactor
-                    List<string> tempList = new List<string>();
-                    foreach (string s in r.Item2)
-                    {
-                        tempList.Add(stringOp(s));
-                    }
-                    //refactor
-                    lList.Add(new Tuple<string, string[]>(r.Item1, tempList.ToArray()));//stringOp(r.Item2)));
-                }
-                retList.Add(lList);
+                var deferred = from r in dict
+                           select new Tuple<string, string[]>(r.Item1, r.Item2.Select((x) => stringOp(x)).ToArray());//stringOp(r.Value);
+                handledQueries.Add(deferred.ToList());
             }
-            return retList;
+            return handledQueries;
         }
     }
 }
